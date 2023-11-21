@@ -1,0 +1,25 @@
+{
+  "name": "oak",
+  "displayName": "oak",
+  "description": "oak language support",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "oak",
+      "aliases": ["Oak", "oak"],
+      "extensions": [".oak"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "oak",
+      "scopeName": "source.oak",
+      "path": "./syntaxes/oak.tmLanguage.json"
+    }]
+  }
+}
