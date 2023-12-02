@@ -18,7 +18,7 @@
 				},
 				{
 					"name": "keyword.control.oak",
-					"match": "\\b(if|then|else|let|in|select|case)\\b"
+					"match": "\\b(if|then|else|let|in|select|case|end)\\b"
 				}
 			]
 		},
