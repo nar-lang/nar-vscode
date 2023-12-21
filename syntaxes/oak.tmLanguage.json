@@ -14,7 +14,7 @@
 			"patterns": [
 				{
 					"name": "keyword.oak",
-					"match": "\\b(module|import|as|exposing|infix|alias|type|def|hidden|extern)\\b"
+					"match": "\\b(module|import|as|exposing|infix|alias|type|def|hidden|native)\\b"
 				},
 				{
 					"name": "keyword.control.oak",
