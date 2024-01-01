@@ -23,14 +23,14 @@ export function activate(context: ExtensionContext) {
 
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
-		documentSelector: [{ scheme: 'file', language: 'oak' }],
+		documentSelector: [{ scheme: 'file', language: '' }],
 		synchronize: {},
 	};
 
 	// Create the language client and start the client.
 	client = new LanguageClient(
-		'oakLanguageServer',
-		'Oak Language Server',
+		'LanguageServer',
+		'Nar Language Server',
 		serverOptions,
 		clientOptions
 	);

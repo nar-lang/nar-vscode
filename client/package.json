@@ -1,5 +1,5 @@
 {
-	"name": "oak-language-lsp-client",
+	"name": "nar-language-lsp-client",
 	"description": "VSCode part of a language server",
 	"author": "Sergey Dvoynikov",
 	"license": "MIT",
@@ -7,7 +7,7 @@
 	"publisher": "vscode",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/oaklang/vscode"
+		"url": "https://github.com/nar-lang/vscode"
 	},
 	"engines": {
 		"vscode": "^1.43.0"

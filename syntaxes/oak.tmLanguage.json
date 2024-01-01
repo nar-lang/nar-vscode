@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "oak",
+	"name": "",
 	"patterns": [
 		{
 			"include": "#keywords"
@@ -13,26 +13,26 @@
 		"keywords": {
 			"patterns": [
 				{
-					"name": "keyword.oak",
+					"name": "keyword.",
 					"match": "\\b(module|import|as|exposing|infix|alias|type|def|hidden|native)\\b"
 				},
 				{
-					"name": "keyword.control.oak",
+					"name": "keyword.control.",
 					"match": "\\b(if|then|else|let|in|select|case|end)\\b"
 				}
 			]
 		},
 		"strings": {
-			"name": "string.quoted.double.oak",
+			"name": "string.quoted.double.",
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.oak",
+					"name": "constant.character.escape.",
 					"match": "\\\\."
 				}
 			]
 		}
 	},
-	"scopeName": "source.oak"
+	"scopeName": "source."
 }

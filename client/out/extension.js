@@ -20,11 +20,11 @@ function activate(context) {
     };
     let clientOptions = {
         // Register the server for plain text documents
-        documentSelector: [{ scheme: 'file', language: 'oak' }],
+        documentSelector: [{ scheme: 'file', language: '' }],
         synchronize: {},
     };
     // Create the language client and start the client.
-    client = new vscode_languageclient_1.LanguageClient('oakLanguageServer', 'Oak Language Server', serverOptions, clientOptions);
+    client = new vscode_languageclient_1.LanguageClient('LanguageServer', 'Nar Language Server', serverOptions, clientOptions);
     // Start the client. This will also launch the server
     client.start();
 }

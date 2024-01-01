@@ -1,12 +1,12 @@
 {
-  "name": "oak-language",
-  "description": "Oak language extension",
+  "name": "nar-language",
+  "description": "Nar language extension",
   "author": "Sergey Dvoynikov",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaklang/vscode"
+    "url": "https://github.com/nar-lang/vscode"
   },
   "publisher": "Sergey Dvoynikov",
   "categories": [
@@ -17,28 +17,28 @@
     "vscode": "^1.74.0"
   },
   "activationEvents": [
-    "onLanguage:oak"
+    "onLanguage:"
   ],
   "main": "./client/out/extension",
   "contributes": {
     "languages": [
       {
-        "id": "oak",
+        "id": "",
         "aliases": [
-          "Oak",
-          "oak"
+          "Nar",
+          ""
         ],
         "extensions": [
-          ".oak"
+          "."
         ],
         "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
       {
-        "language": "oak",
-        "scopeName": "source.oak",
-        "path": "./syntaxes/oak.tmLanguage.json"
+        "language": "",
+        "scopeName": "source.",
+        "path": "./syntaxes/.tmLanguage.json"
       }
     ]
   },
