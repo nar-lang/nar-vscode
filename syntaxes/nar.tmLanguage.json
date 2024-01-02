@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "",
+	"name": "nar",
 	"patterns": [
 		{
 			"include": "#keywords"
@@ -13,26 +13,26 @@
 		"keywords": {
 			"patterns": [
 				{
-					"name": "keyword.",
+					"name": "keyword.nar",
 					"match": "\\b(module|import|as|exposing|infix|alias|type|def|hidden|native)\\b"
 				},
 				{
-					"name": "keyword.control.",
+					"name": "keyword.control.nar",
 					"match": "\\b(if|then|else|let|in|select|case|end)\\b"
 				}
 			]
 		},
 		"strings": {
-			"name": "string.quoted.double.",
+			"name": "string.quoted.double.nar",
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.",
+					"name": "constant.character.escape.nar",
 					"match": "\\\\."
 				}
 			]
 		}
 	},
-	"scopeName": "source."
+	"scopeName": "source.nar"
 }

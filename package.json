@@ -23,22 +23,22 @@
   "contributes": {
     "languages": [
       {
-        "id": "",
+        "id": "nar",
         "aliases": [
           "Nar",
-          ""
+          "nar"
         ],
         "extensions": [
-          "."
+          ".nar"
         ],
         "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
       {
-        "language": "",
-        "scopeName": "source.",
-        "path": "./syntaxes/.tmLanguage.json"
+        "language": "nar",
+        "scopeName": "source.nar",
+        "path": "./syntaxes/nar.tmLanguage.json"
       }
     ]
   },
