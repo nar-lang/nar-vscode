@@ -43,8 +43,9 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
+    "vscode:prepublish": "cd client && npm install && cd .. && npm run compile && npm run nar-lsp",
     "compile": "tsc -b",
+    "nar-lsp": "./build-binary.sh",
     "watch": "tsc -b -w",
     "lint": "eslint ./client/src --ext .ts,.tsx",
     "postinstall": "cd client && npm install"
