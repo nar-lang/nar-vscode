@@ -3,25 +3,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode_languageclient_1 = require("vscode-languageclient");
 const path = require("node:path");
+const net = require("net");
 let client;
 function activate(context) {
     let executable = context.asAbsolutePath(getExecutableName());
-    //let serverOptions = () => {
-    // Connect to language server via socket
-    // let socket = net.connect({
-    //         port: 56918,
-    //         host: "127.0.0.1"
-    //     });
-    // let result: StreamInfo = {
-    //     writer: socket,
-    //     reader: socket
-    // };
-    // return Promise.resolve(result);
-    //};
     let serverOptions = {
-        run: { transport: vscode_languageclient_1.TransportKind.stdio, command: executable, args: ["-lsp=stdio"] },
-        debug: { transport: vscode_languageclient_1.TransportKind.stdio, command: executable, args: ["-lsp=stdio"] },
+        transport: vscode_languageclient_1.TransportKind.stdio, command: executable, args: ["-lsp=stdio"]
     };
+    if (true) {
+        serverOptions = () => {
+            // Connect to language server via socket
+            let socket = net.connect({
+                port: 56918,
+                host: "127.0.0.1"
+            });
+            let result = {
+                writer: socket,
+                reader: socket
+            };
+            return Promise.resolve(result);
+        };
+    }
     let clientOptions = {
         // Register the server for plain text documents
         documentSelector: [{ scheme: 'file', language: '' }],

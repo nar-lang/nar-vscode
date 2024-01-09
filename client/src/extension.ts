@@ -1,7 +1,8 @@
-import { ExtensionContext } from "vscode";
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from "vscode-languageclient";
+import {ExtensionContext} from "vscode";
+import {LanguageClient, LanguageClientOptions, ServerOptions, StreamInfo, TransportKind} from "vscode-languageclient";
 import * as path from "node:path";
 import * as vscode from "vscode";
+import * as net from "net";
 
 let client: LanguageClient;
 
@@ -9,27 +10,28 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
     let executable = context.asAbsolutePath(getExecutableName());
 
-    //let serverOptions = () => {
-    // Connect to language server via socket
-    // let socket = net.connect({
-    //         port: 56918,
-    //         host: "127.0.0.1"
-    //     });
-    // let result: StreamInfo = {
-    //     writer: socket,
-    //     reader: socket
-    // };
-    // return Promise.resolve(result);
-    //};
-
     let serverOptions: ServerOptions = {
-        run: { transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"] },
-        debug: { transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"] },
+        transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"]
+    }
+
+    if (true) {
+        serverOptions = () => {
+            // Connect to language server via socket
+            let socket = net.connect({
+                port: 56918,
+                host: "127.0.0.1"
+            });
+            let result: StreamInfo = {
+                writer: socket,
+                reader: socket
+            };
+            return Promise.resolve(result);
+        };
     }
 
     let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
-        documentSelector: [{ scheme: 'file', language: '' }],
+        documentSelector: [{scheme: 'file', language: ''}],
         synchronize: {},
         outputChannelName: "Nar Language Server",
     };
