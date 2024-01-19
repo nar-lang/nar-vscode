@@ -14,7 +14,7 @@ export function activate(context: ExtensionContext) {
         transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"]
     }
 
-    if (true) {
+    if (false) {
         serverOptions = () => {
             // Connect to language server via socket
             let socket = net.connect({
