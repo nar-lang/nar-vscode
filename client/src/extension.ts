@@ -14,7 +14,7 @@ export function activate(context: ExtensionContext) {
         transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"]
     }
 
-    if (false) {
+    if (true) {
         serverOptions = () => {
             // Connect to language server via socket
             let socket = net.connect({
@@ -31,7 +31,7 @@ export function activate(context: ExtensionContext) {
 
     let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
-        documentSelector: [{scheme: 'file', language: ''}],
+        documentSelector: [{scheme: 'file', language: 'nar'}],
         synchronize: {},
         outputChannelName: "Nar Language Server",
     };

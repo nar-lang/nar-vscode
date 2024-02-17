@@ -16,9 +16,7 @@
   "engines": {
     "vscode": "^1.74.0"
   },
-  "activationEvents": [
-    "onLanguage:"
-  ],
+  "activationEvents": [],
   "main": "./client/out/extension",
   "contributes": {
     "languages": [
@@ -34,6 +32,11 @@
         "configuration": "./language-configuration.json"
       }
     ],
+    "configurationDefaults": {
+      "[nar]": {
+        "editor.semanticHighlighting.enabled": true
+      }
+    },
     "grammars": [
       {
         "language": "nar",

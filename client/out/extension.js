@@ -26,7 +26,7 @@ function activate(context) {
     }
     let clientOptions = {
         // Register the server for plain text documents
-        documentSelector: [{ scheme: 'file', language: '' }],
+        documentSelector: [{ scheme: 'file', language: 'nar' }],
         synchronize: {},
         outputChannelName: "Nar Language Server",
     };
