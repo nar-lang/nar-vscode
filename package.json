@@ -1,12 +1,12 @@
 {
-  "name": "nar-language",
-  "description": "Nar language extension",
+  "name": "Nar Language",
+  "description": "Feature reach support for Nar Language",
   "author": "Sergey Dvoynikov",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nar-lang/vscode"
+    "url": "https://github.com/nar-lang/nar-vscode"
   },
   "publisher": "Sergey Dvoynikov",
   "categories": [
@@ -14,11 +14,19 @@
   ],
   "keywords": [],
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.87.0"
   },
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:nar"
+  ],
+  "icon": "./logo-transparent.png",
   "main": "./client/out/extension",
   "contributes": {
+    "configurationDefaults": {
+      "[nar]": {
+        "editor.semanticHighlighting.enabled": true
+      }
+    },
     "languages": [
       {
         "id": "nar",
@@ -32,11 +40,6 @@
         "configuration": "./language-configuration.json"
       }
     ],
-    "configurationDefaults": {
-      "[nar]": {
-        "editor.semanticHighlighting.enabled": true
-      }
-    },
     "grammars": [
       {
         "language": "nar",
@@ -54,11 +57,11 @@
     "postinstall": "cd client && npm install"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^16.18.34",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0",
-    "eslint": "^7.26.0",
-    "typescript": "^5.3.2"
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
   }
 }
