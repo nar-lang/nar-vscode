@@ -1,18 +1,31 @@
 {
-  "name": "Nar Language",
+  "name": "nar-vscode",
+  "displayName": "Nar Language",
   "description": "Feature reach support for Nar Language",
-  "author": "Sergey Dvoynikov",
-  "license": "MIT",
+  "author": {
+    "name": "Sergey Dvoynikov",
+    "email": "s@dvoyni.com"
+  },
+  "license": "BSD-3-Clause",
   "version": "1.0.0",
+  "homepage": "https://nar-lang.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/nar-lang/nar-vscode"
   },
-  "publisher": "Sergey Dvoynikov",
+  "bugs": {
+    "url": "https://github.com/nar-lang/nar-vscode/issues"
+  },
+  "publisher": "dvoyni",
   "categories": [
     "Programming Languages"
   ],
-  "keywords": [],
+  "keywords": [
+    "nar",
+    "lsp",
+    "functional",
+    "scripting"
+  ],
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -25,6 +38,36 @@
     "configurationDefaults": {
       "[nar]": {
         "editor.semanticHighlighting.enabled": true
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Nar",
+      "properties": {
+        "nar.pathToCompiler": {
+          "type": "string",
+          "default": "nar",
+          "markdownDescription": "Path to the Nar compiler executable. Usually `~/.nar/bin/nar` or just `nar` if it's in your PATH"
+        },
+        "nar.transport": {
+          "type": "string",
+          "default": "stdio",
+          "enum": [
+            "stdio",
+            "tcp"
+          ],
+          "markdownDescription": "Transport to use for the language server. `stdio` runs default LSP server. `tcp` is useful for remote development or debugging (you should start your own LSP server)."
+        },
+        "nar.tcpPort": {
+          "type": "number",
+          "default": 56918,
+          "markdownDescription": "TCP port to use for the language server. Only used if `nar.transport` is set to `tcp`."
+        },
+        "nar.cacheDir": {
+          "type": "string",
+          "default": "~/.nar/packages",
+          "markdownDescription": "Directory where Nar packages are stored. This is where the compiler will look for dependencies. Defaults to `~/.nar/packages`."
+        }
       }
     },
     "languages": [
@@ -49,19 +92,13 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "cd client && npm install && cd .. && npm run compile && npm run nar-lsp",
+    "vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
     "compile": "tsc -b",
-    "nar-lsp": "./build-binary.sh",
-    "watch": "tsc -b -w",
-    "lint": "eslint ./client/src --ext .ts,.tsx",
-    "postinstall": "cd client && npm install"
+    "postinstall": "cd client && npm install",
+    "package": "vsce package && mv *.vsix releases/"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.24",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
-    "eslint": "^8.57.0",
     "typescript": "^5.3.3"
   }
 }

@@ -1,51 +1,51 @@
-import {ExtensionContext} from "vscode";
-import {LanguageClient, LanguageClientOptions, ServerOptions, StreamInfo, TransportKind} from "vscode-languageclient";
-import * as path from "node:path";
+import * as lc from "vscode-languageclient/node";
 import * as vscode from "vscode";
 import * as net from "net";
+import * as os from "os";
 
-let client: LanguageClient;
+let client: lc.LanguageClient;
 
+export function activate(context: vscode.ExtensionContext) {
+    const outputChannelName = "Nar Language Server";
 
-export function activate(context: ExtensionContext) {
-    let executable = context.asAbsolutePath(getExecutableName());
-
-    let serverOptions: ServerOptions = {
-        transport: TransportKind.stdio, command: executable, args: ["-lsp=stdio"]
+    let executable = vscode.workspace.getConfiguration("nar").get("pathToCompiler", "nar");
+    if (executable.startsWith("~/")) {
+        executable = os.homedir() + executable.slice(1);
     }
+    const transport = vscode.workspace.getConfiguration("nar").get<string>("transport", "stdio");
+    const port = vscode.workspace.getConfiguration("nar").get("tcpPort", 56918);
+    const cache = vscode.workspace.getConfiguration("nar").get("cacheDir", "~/.nar/packages");
 
-    if (true) {
-        serverOptions = () => {
-            // Connect to language server via socket
-            let socket = net.connect({
-                port: 56918,
-                host: "127.0.0.1"
-            });
-            let result: StreamInfo = {
-                writer: socket,
-                reader: socket
+    let serverOptions;
+    switch (transport) {
+        case "stdio":
+            serverOptions = {
+                transport: lc.TransportKind.stdio,
+                command: executable, args: ["-lsp", `-cache="${cache}"`]
             };
-            return Promise.resolve(result);
-        };
+            break;
+        case "tcp":
+            serverOptions = () => {
+                let socket = net.connect({port: port, host: "127.0.0.1"});
+                let result: lc.StreamInfo = {writer: socket, reader: socket};
+                return Promise.resolve(result);
+            };
+            break;
     }
 
-    let clientOptions: LanguageClientOptions = {
-        // Register the server for plain text documents
-        documentSelector: [{scheme: 'file', language: 'nar'}],
+    let clientOptions: lc.LanguageClientOptions = {
+        documentSelector: [{scheme: "file", language: "nar"}],
         synchronize: {},
-        outputChannelName: "Nar Language Server",
+        outputChannelName: outputChannelName,
     };
-
-    // Create the language client and start the client.
-    client = new LanguageClient(
-        'LanguageServer',
-        'Nar Language Server',
+    client = new lc.LanguageClient(
+        "LanguageServer",
+        "Nar Language Server",
         serverOptions,
         clientOptions
     );
-
-    // Start the client. This will also launch the server
     client.start();
+
 }
 
 export function deactivate(): Thenable<void> | undefined {
@@ -53,41 +53,4 @@ export function deactivate(): Thenable<void> | undefined {
         return undefined;
     }
     return client.stop();
-}
-
-function getExecutableName(): string {
-    let platform = "";
-    let ext = "";
-    switch (process.platform) {
-        case "win32":
-            platform = "windows";
-            ext = ".exe";
-            break;
-        case "linux":
-            platform = "linux";
-            break;
-        case "darwin":
-            platform = "darwin";
-            break;
-        default:
-            throw new Error("Unsupported platform: " + process.platform);
-    }
-    let arch = "";
-    switch (process.arch) {
-        case "arm":
-            arch = "arm";
-            break;
-        case "arm64":
-            arch = "arm64";
-            break;
-        case "x32":
-            arch = "386";
-            break;
-        case "x64":
-            arch = "amd64";
-            break;
-        default:
-            throw new Error("Unsupported architecture: " + process.arch);
-    }
-    return path.join("bin", `nar-${platform}-${arch}${ext}`);
 }

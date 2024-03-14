@@ -2,18 +2,17 @@
 	"name": "nar-language-lsp-client",
 	"description": "VSCode part of a language server",
 	"author": "Sergey Dvoynikov",
-	"license": "MIT",
-	"version": "0.0.1",
-	"publisher": "vscode",
+	"license": "BSD-3-Clause",
+	"version": "1.0.0",
+	"publisher": "dvoyni",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nar-lang/vscode"
+		"url": "https://github.com/nar-lang/nar-vscode"
 	},
 	"engines": {
 		"vscode": "^1.43.0"
 	},
 	"dependencies": {
-		"vscode-html-languageservice": "^5.1.2",
 		"vscode-languageclient": "^9.0.1"
 	},
 	"devDependencies": {
