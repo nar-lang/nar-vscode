@@ -16,3 +16,4 @@ lunar/.github/**
 lunar/.gitignore
 # Keep the runtime Lua sources; drop the dev-only debug tree.
 lunar/debug/**
+# Keep `bin/` (bundled lua binaries per platform). Explicitly list nothing here.

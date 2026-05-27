@@ -46,8 +46,8 @@
                 },
                 "nar.lsp.lua": {
                     "type": "string",
-                    "default": "lua",
-                    "description": "Lua interpreter used to run the lunar LSP server."
+                    "default": "",
+                    "description": "Lua interpreter used to run the lunar LSP server. When empty, the extension uses a bundled Lua 5.4 binary matching your platform (and falls back to `lua` on PATH if no bundled binary is available)."
                 },
                 "nar.lsp.args": {
                     "type": "array",

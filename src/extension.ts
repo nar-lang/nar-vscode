@@ -54,6 +54,32 @@ function findLunarScript(extensionPath: string): string | undefined {
     return undefined;
 }
 
+/** Pick the bundled lua binary that matches the current platform/arch. Returns
+ *  undefined when no bundled binary exists for this platform (the extension
+ *  will then fall back to PATH lookup / user-configured interpreter). */
+function findBundledLua(extensionPath: string): string | undefined {
+    const platform = process.platform; // "darwin" | "linux" | "win32" | ...
+    const arch = process.arch;         // "arm64" | "x64" | ...
+    const exe = platform === "win32" ? "lua.exe" : "lua";
+    const dir = `${platform}-${arch}`;
+    const candidate = path.join(extensionPath, "bin", dir, exe);
+    if (!fs.existsSync(candidate)) {
+        return undefined;
+    }
+    // Ensure exec bit on POSIX (vsce sometimes drops it).
+    if (platform !== "win32") {
+        try {
+            const st = fs.statSync(candidate);
+            if ((st.mode & 0o111) === 0) {
+                fs.chmodSync(candidate, st.mode | 0o755);
+            }
+        } catch {
+            // best-effort; ignore
+        }
+    }
+    return candidate;
+}
+
 // Replace ${workspaceFolder} (and ${workspaceFolder:name}) with the matching
 // workspace path. Returns "" when the input is empty.
 function expandPath(input: string): string {
@@ -70,8 +96,15 @@ function expandPath(input: string): string {
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     const cfg = vscode.workspace.getConfiguration("nar");
-    const luaInterpreter = cfg.get<string>("lsp.lua") || "lua";
+    const userLua = cfg.get<string>("lsp.lua") || "";
     const extraArgs = cfg.get<string[]>("lsp.args") || [];
+
+    // Pick interpreter: explicit user setting wins, otherwise prefer the
+    // bundled binary for this platform, otherwise fall back to PATH `lua`.
+    let luaInterpreter = userLua;
+    if (!luaInterpreter) {
+        luaInterpreter = findBundledLua(context.extensionPath) || "lua";
+    }
 
     const lunarScript = findLunarScript(context.extensionPath);
     if (!lunarScript) {

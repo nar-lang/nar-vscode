@@ -1,0 +1,74 @@
+name: Build bundled Lua binaries
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/build-lua.sh"
+      - ".github/workflows/build-lua.yml"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: darwin-arm64
+            runner: macos-14
+          - target: darwin-x64
+            runner: macos-13
+          - target: linux-x64
+            runner: ubuntu-latest
+          - target: linux-arm64
+            runner: ubuntu-24.04-arm
+          - target: win32-x64
+            runner: ubuntu-latest
+            mingw: true
+
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mingw-w64 (windows cross-compile)
+        if: matrix.mingw == true
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+
+      - name: Build Lua for ${{ matrix.target }}
+        run: tools/build-lua.sh ${{ matrix.target }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lua-${{ matrix.target }}
+          path: bin/${{ matrix.target }}/
+
+  collect:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: bin/
+          pattern: lua-*
+          merge-multiple: false
+
+      - name: Reshape into bin/<target>/ layout
+        run: |
+          set -e
+          shopt -s nullglob
+          for dir in bin/lua-*; do
+            target="${dir#bin/lua-}"
+            mkdir -p "bin/$target"
+            mv "$dir"/* "bin/$target/"
+            rmdir "$dir"
+          done
+          ls -la bin/*/
+
+      - name: Upload combined bin/ archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: lua-bundle
+          path: bin/
