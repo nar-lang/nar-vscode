@@ -4,7 +4,15 @@ out/test/**
 node_modules/**
 src/**
 .gitignore
+.gitmodules
 .eslintrc.json
 tsconfig.json
 **/*.map
 **/*.ts
+# Don't ship git metadata for the bundled `lunar` submodule.
+lunar/.git
+lunar/.git/**
+lunar/.github/**
+lunar/.gitignore
+# Keep the runtime Lua sources; drop the dev-only debug tree.
+lunar/debug/**

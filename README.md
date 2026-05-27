@@ -22,14 +22,16 @@ compiler running as a JSON-RPC LSP server (`lua lunar/cli/init.lua --lsp`).
 
 ## Requirements
 
-You need:
+You need a [Lua 5.4](https://www.lua.org/) interpreter on your `PATH`
+(or point `nar.lsp.lua` at one explicitly). The Nar compiler itself
+([`lunar`](https://github.com/nar-lang/lunar)) is **bundled** with the
+extension as a git submodule, so end users don't need a separate
+checkout. The CLI is auto-discovered in this order:
 
-1. A [Lua 5.4](https://www.lua.org/) interpreter on your `PATH`
-   (or set `nar.lsp.lua` to its absolute path).
-2. A checkout of the [`lunar`](https://github.com/nar-lang/lunar) repository.
-   The extension will look for `lunar/cli/init.lua` walking up from each
-   workspace folder. You can also point it explicitly via the `nar.lsp.path`
-   setting or the `LUNAR_CLI` environment variable.
+1. `nar.lsp.path` user setting (absolute path to `lunar/cli/init.lua`)
+2. `LUNAR_CLI` environment variable
+3. Bundled copy shipped with the extension (`<extension>/lunar/cli/init.lua`)
+4. Heuristic walk up from each workspace folder looking for `lunar/cli/init.lua`
 
 ## Settings
 
@@ -43,9 +45,17 @@ You need:
 ## Development
 
 ```sh
+git clone --recurse-submodules https://github.com/nar-lang/nar-vscode.git
+cd nar-vscode
 npm install
 npm run compile
 # Open this folder in VS Code, press F5 to launch the Extension Development Host.
+```
+
+To refresh the bundled compiler later:
+
+```sh
+git submodule update --remote lunar
 ```
 
 ## License

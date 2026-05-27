@@ -13,10 +13,11 @@ let client: LanguageClient | undefined;
 /** Try to discover the lunar CLI script. Priority:
  *  1. user setting `nar.lsp.path`
  *  2. `LUNAR_CLI` env var
- *  3. `lunar` executable on PATH (POSIX, via `which`) — used as a path hint
+ *  3. bundled copy under the extension (`<ext>/lunar/cli/init.lua`),
+ *     populated by the git submodule / .vsix bundle
  *  4. heuristic search up the workspace tree for a `lunar/cli/init.lua`
  */
-function findLunarScript(): string | undefined {
+function findLunarScript(extensionPath: string): string | undefined {
     const cfg = vscode.workspace.getConfiguration("nar");
     const configured = cfg.get<string>("lsp.path") || "";
     if (configured && fs.existsSync(configured)) {
@@ -26,6 +27,11 @@ function findLunarScript(): string | undefined {
     const env = process.env["LUNAR_CLI"];
     if (env && fs.existsSync(env)) {
         return env;
+    }
+
+    const bundled = path.join(extensionPath, "lunar", "cli", "init.lua");
+    if (fs.existsSync(bundled)) {
+        return bundled;
     }
 
     // Walk up from each workspace folder looking for `lunar/cli/init.lua`.
@@ -53,10 +59,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const luaInterpreter = cfg.get<string>("lsp.lua") || "lua";
     const extraArgs = cfg.get<string[]>("lsp.args") || [];
 
-    const lunarScript = findLunarScript();
+    const lunarScript = findLunarScript(context.extensionPath);
     if (!lunarScript) {
         const choice = await vscode.window.showWarningMessage(
-            "Nar: could not locate the lunar CLI script. Set `nar.lsp.path` in settings.",
+            "Nar: could not locate the lunar CLI script. Try reinstalling the extension, or set `nar.lsp.path` in settings.",
             "Open Settings",
         );
         if (choice === "Open Settings") {

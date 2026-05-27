@@ -1,0 +1,3 @@
+[submodule "lunar"]
+	path = lunar
+	url = https://github.com/nar-lang/lunar.git
