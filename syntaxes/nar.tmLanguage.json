@@ -1,0 +1,164 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Nar",
+    "scopeName": "source.nar",
+    "patterns": [
+        { "include": "#doc-line-comment" },
+        { "include": "#doc-block-comment" },
+        { "include": "#line-comment" },
+        { "include": "#block-comment" },
+        { "include": "#module-decl" },
+        { "include": "#import-decl" },
+        { "include": "#infix-decl" },
+        { "include": "#alias-decl" },
+        { "include": "#type-decl" },
+        { "include": "#def-decl" },
+        { "include": "#strings" },
+        { "include": "#chars" },
+        { "include": "#numbers" },
+        { "include": "#keywords" },
+        { "include": "#operators" },
+        { "include": "#types" },
+        { "include": "#constructors" },
+        { "include": "#identifiers" }
+    ],
+    "repository": {
+        "doc-line-comment": {
+            "match": "///.*$",
+            "name": "comment.line.documentation.nar"
+        },
+        "doc-block-comment": {
+            "begin": "/\\*\\*",
+            "end": "\\*/",
+            "name": "comment.block.documentation.nar"
+        },
+        "line-comment": {
+            "match": "//.*$",
+            "name": "comment.line.double-slash.nar"
+        },
+        "block-comment": {
+            "begin": "/\\*",
+            "end": "\\*/",
+            "name": "comment.block.nar"
+        },
+        "module-decl": {
+            "match": "\\b(module)\\s+([A-Za-z][\\w.]*)",
+            "captures": {
+                "1": { "name": "keyword.other.module.nar" },
+                "2": { "name": "entity.name.namespace.nar" }
+            }
+        },
+        "import-decl": {
+            "begin": "\\b(import)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.import.nar" }
+            },
+            "end": "$",
+            "patterns": [
+                { "match": "\\b(as|exposing|hidden)\\b", "name": "keyword.control.import.nar" },
+                { "match": "\\*", "name": "keyword.operator.wildcard.nar" },
+                { "match": "[A-Z][\\w.]*", "name": "entity.name.namespace.nar" },
+                { "include": "#identifiers" }
+            ]
+        },
+        "infix-decl": {
+            "match": "\\b(infix)\\b(?:\\s+(hidden))?",
+            "captures": {
+                "1": { "name": "keyword.other.infix.nar" },
+                "2": { "name": "storage.modifier.nar" }
+            }
+        },
+        "alias-decl": {
+            "match": "\\b(alias)\\b(?:\\s+(hidden|native))?",
+            "captures": {
+                "1": { "name": "keyword.other.alias.nar" },
+                "2": { "name": "storage.modifier.nar" }
+            }
+        },
+        "type-decl": {
+            "match": "\\b(type)\\b(?:\\s+(hidden|native))?",
+            "captures": {
+                "1": { "name": "keyword.other.type.nar" },
+                "2": { "name": "storage.modifier.nar" }
+            }
+        },
+        "def-decl": {
+            "match": "\\b(def)\\b(?:\\s+(hidden|native))?\\s+([a-z_][\\w]*)?",
+            "captures": {
+                "1": { "name": "keyword.other.def.nar" },
+                "2": { "name": "storage.modifier.nar" },
+                "3": { "name": "entity.name.function.nar" }
+            }
+        },
+        "keywords": {
+            "patterns": [
+                { "match": "\\b(if|then|else|let|in|case|select|of|end|do)\\b",
+                  "name": "keyword.control.nar" },
+                { "match": "\\b(hidden|native)\\b",
+                  "name": "storage.modifier.nar" },
+                { "match": "\\b(left|right|non)\\b",
+                  "name": "keyword.other.associativity.nar" },
+                { "match": "\\b(True|False)\\b",
+                  "name": "constant.language.boolean.nar" },
+                { "match": "\\b(Nothing|Just|Ok|Err|LT|EQ|GT|Unit)\\b",
+                  "name": "constant.language.nar" }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                { "match": "->|=>|<-|\\|", "name": "keyword.operator.arrow.nar" },
+                { "match": "<\\||\\|>|<~|~>", "name": "keyword.operator.pipe.nar" },
+                { "match": "==|!=|<=|>=|<|>", "name": "keyword.operator.comparison.nar" },
+                { "match": "&&|\\|\\||\\^\\^", "name": "keyword.operator.logical.nar" },
+                { "match": "\\+|-|\\*|/|%|<>|\\+\\+", "name": "keyword.operator.arithmetic.nar" },
+                { "match": "=", "name": "keyword.operator.assignment.nar" },
+                { "match": "\\\\", "name": "keyword.operator.lambda.nar" }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.nar",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                { "name": "constant.character.escape.nar",
+                  "match": "\\\\(u[0-9A-Fa-f]{4}|x[0-9A-Fa-f]{2}|[\"\\\\nrtbf0avs'])" }
+            ]
+        },
+        "chars": {
+            "name": "string.quoted.single.nar",
+            "match": "'(\\\\(u[0-9A-Fa-f]{4}|x[0-9A-Fa-f]{2}|[\"\\\\nrtbf0avs'])|[^'])'"
+        },
+        "numbers": {
+            "patterns": [
+                { "name": "constant.numeric.hex.nar",
+                  "match": "\\b0[xX][0-9A-Fa-f]+\\b" },
+                { "name": "constant.numeric.binary.nar",
+                  "match": "\\b0[bB][01]+\\b" },
+                { "name": "constant.numeric.octal.nar",
+                  "match": "\\b0[oO][0-7]+\\b" },
+                { "name": "constant.numeric.float.nar",
+                  "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b" },
+                { "name": "constant.numeric.float.nar",
+                  "match": "\\b\\d+[eE][+-]?\\d+\\b" },
+                { "name": "constant.numeric.integer.nar",
+                  "match": "\\b\\d+\\b" }
+            ]
+        },
+        "types": {
+            "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+            "name": "entity.name.type.nar"
+        },
+        "constructors": {
+            "match": "\\b[A-Z][A-Za-z0-9_]*(?=\\s*\\()",
+            "name": "entity.name.tag.nar"
+        },
+        "identifiers": {
+            "patterns": [
+                { "name": "support.function.builtin.nar",
+                  "match": "\\b(map|filter|foldl|foldr|length|reverse|append|concat|head|tail)\\b" },
+                { "match": "\\b[a-z_][A-Za-z0-9_]*\\b",
+                  "name": "variable.other.nar" }
+            ]
+        }
+    }
+}

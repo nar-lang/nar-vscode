@@ -1,0 +1,80 @@
+{
+    "name": "nar-language",
+    "displayName": "Nar Language Support",
+    "description": "Syntax highlighting and LSP integration for the Nar programming language.",
+    "version": "0.1.0",
+    "publisher": "nar-lang",
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "icon": "icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nar-lang/nar-vscode.git"
+    },
+    "activationEvents": [
+        "onLanguage:nar"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "nar",
+                "aliases": ["Nar", "nar"],
+                "extensions": [".nar"],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "nar",
+                "scopeName": "source.nar",
+                "path": "./syntaxes/nar.tmLanguage.json"
+            }
+        ],
+        "configuration": {
+            "title": "Nar",
+            "properties": {
+                "nar.lsp.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Absolute path to the `lunar` CLI script (e.g. /path/to/lunar/cli/init.lua). When empty, the extension looks for `lunar` on PATH and falls back to bundled discovery."
+                },
+                "nar.lsp.lua": {
+                    "type": "string",
+                    "default": "lua",
+                    "description": "Lua interpreter used to run the lunar LSP server."
+                },
+                "nar.lsp.args": {
+                    "type": "array",
+                    "default": [],
+                    "items": { "type": "string" },
+                    "description": "Extra arguments forwarded to the lunar CLI before `--lsp`."
+                },
+                "nar.trace.server": {
+                    "type": "string",
+                    "enum": ["off", "messages", "verbose"],
+                    "default": "off",
+                    "description": "Trace level for LSP communication (visible in the Output panel)."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.19.0",
+        "@types/vscode": "^1.80.0",
+        "typescript": "^5.4.0"
+    }
+}
