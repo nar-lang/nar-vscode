@@ -19,7 +19,7 @@ let client: LanguageClient | undefined;
  */
 function findLunarScript(extensionPath: string): string | undefined {
     const cfg = vscode.workspace.getConfiguration("nar");
-    const configured = cfg.get<string>("lsp.path") || "";
+    const configured = expandPath(cfg.get<string>("lsp.path") || "");
     if (configured && fs.existsSync(configured)) {
         return configured;
     }
@@ -52,6 +52,20 @@ function findLunarScript(extensionPath: string): string | undefined {
     }
 
     return undefined;
+}
+
+// Replace ${workspaceFolder} (and ${workspaceFolder:name}) with the matching
+// workspace path. Returns "" when the input is empty.
+function expandPath(input: string): string {
+    if (!input) return "";
+    const folders = vscode.workspace.workspaceFolders || [];
+    return input
+        .replace(/\$\{workspaceFolder\}/g,
+            folders.length > 0 ? folders[0].uri.fsPath : "")
+        .replace(/\$\{workspaceFolder:([^}]+)\}/g, (_, name) => {
+            const match = folders.find(f => f.name === name);
+            return match ? match.uri.fsPath : "";
+        });
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
