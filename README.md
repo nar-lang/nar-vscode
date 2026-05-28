@@ -22,11 +22,18 @@ compiler running as a JSON-RPC LSP server (`lua lunar/cli/init.lua --lsp`).
 
 ## Requirements
 
-You need a [Lua 5.4](https://www.lua.org/) interpreter on your `PATH`
-(or point `nar.lsp.lua` at one explicitly). The Nar compiler itself
-([`lunar`](https://github.com/nar-lang/lunar)) is **bundled** with the
-extension as a git submodule, so end users don't need a separate
-checkout. The CLI is auto-discovered in this order:
+None for typical use. The extension **bundles** both:
+
+- the [`lunar`](https://github.com/nar-lang/lunar) compiler (as a git submodule), and
+- an official [Lua 5.4](https://www.lua.org/) interpreter for every supported
+  platform (`darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64`,
+  `win32-x64`).
+
+The bundled Lua is picked automatically at activation based on `process.platform`
+and `process.arch`. If you'd rather use a Lua interpreter from your system,
+set `nar.lsp.lua` to its path (or to `"lua"` for a PATH lookup).
+
+The `lunar` CLI is auto-discovered in this order:
 
 1. `nar.lsp.path` user setting (absolute path to `lunar/cli/init.lua`)
 2. `LUNAR_CLI` environment variable
@@ -37,8 +44,8 @@ checkout. The CLI is auto-discovered in this order:
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `nar.lsp.path` | `""` | Absolute path to `lunar/cli/init.lua`. |
-| `nar.lsp.lua`  | `"lua"` | Lua interpreter binary used to run the server. |
+| `nar.lsp.path` | `""` | Absolute path to `lunar/cli/init.lua`. Supports `${workspaceFolder}` and `${workspaceFolder:name}`. |
+| `nar.lsp.lua`  | `""` | Lua interpreter binary used to run the server. When empty, uses the bundled Lua 5.4 for your platform; falls back to `lua` on `PATH` if no bundled binary is available. |
 | `nar.lsp.args` | `[]` | Extra CLI args inserted before `--lsp`. |
 | `nar.trace.server` | `"off"` | Trace level for the LSP communication output channel. |
 
@@ -57,6 +64,21 @@ To refresh the bundled compiler later:
 ```sh
 git submodule update --remote lunar
 ```
+
+### Bundled Lua binaries
+
+The `bin/<platform>-<arch>/` directories hold the prebuilt Lua 5.4
+interpreter for each supported VS Code platform. They are sourced as
+follows:
+
+| Platform | Source |
+| --- | --- |
+| `darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64` | Built from [official lua.org source](https://www.lua.org/ftp/) via [`tools/build-lua.sh <target>`](./tools/build-lua.sh) |
+| `win32-x64` | [LuaBinaries](https://luabinaries.sourceforge.net/) Win64 release, downloaded by [`tools/fetch-lua-windows.sh`](./tools/fetch-lua-windows.sh) |
+
+A GitHub Actions workflow [`.github/workflows/build-lua.yml`](./.github/workflows/build-lua.yml)
+fans these jobs out across native macOS/Linux runners and uploads a
+combined `lua-bundle` artifact you can download and drop into `bin/`.
 
 ## License
 
