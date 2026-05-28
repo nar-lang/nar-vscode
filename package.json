@@ -1,8 +1,8 @@
 {
-    "name": "nar-language",
-    "displayName": "Nar Language Support",
+    "name": "nar-vscode",
+    "displayName": "Nar Language",
     "description": "Syntax highlighting and LSP integration for the Nar programming language.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "license": "MIT",
     "engines": {
         "vscode": "^1.80.0"
@@ -89,9 +89,10 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "node -e \"require('fs').accessSync('out/extension.js')\"",
         "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./"
+        "watch": "tsc -watch -p ./",
+        "package": "npm ci && npm run compile && npm prune --omit=dev && vsce package --out releases/ && npm install"
     },
     "dependencies": {
         "vscode-languageclient": "^9.0.1"

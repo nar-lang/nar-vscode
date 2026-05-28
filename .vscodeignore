@@ -1,7 +1,6 @@
 .vscode/**
 .vscode-test/**
 out/test/**
-node_modules/**
 src/**
 .gitignore
 .gitmodules
@@ -17,3 +16,8 @@ lunar/.gitignore
 # Keep the runtime Lua sources; drop the dev-only debug tree.
 lunar/debug/**
 # Keep `bin/` (bundled lua binaries per platform). Explicitly list nothing here.
+# Build/release scaffolding not needed at runtime.
+tools/**
+releases/**
+.github/**
+package-lock.json
